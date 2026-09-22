@@ -1,0 +1,2359 @@
+/* ══════════════════════════════════════════════════════════════
+   FONTS — Involve
+   ══════════════════════════════════════════════════════════════ */
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-Regular.ttf') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-Oblique.ttf') format('truetype');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-Medium.ttf') format('truetype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-MediumOblique.ttf') format('truetype');
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-SemiBold.ttf') format('truetype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-SemiBoldOblique.ttf') format('truetype');
+  font-weight: 600; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-Bold.ttf') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Involve';
+  src: url('../assets/fonts/Involve-BoldOblique.ttf') format('truetype');
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOKENS
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* ── Colour, 1:1 with the Figma variables ── */
+  --black:          #1f1f1f;
+  --white:          #ffffff;
+  --brand-blue:     #361bff;
+  --blue-200:       #1a00dd;
+
+  --grayscale-50:   #f8f8f8;
+  --grayscale-100:  #efefef;
+  --grayscale-200:  #d9d9d9;
+  --grayscale-300:  #c3c3c3;
+  --grayscale-400:  #595959;
+  --grayscale-500:  #414141;
+  --grayscale-600:  #2b2b2b;
+
+  /* Figma's "Linear" gradient, as two named stops plus the state variants.
+     Deliberately NOT built from --brand-blue: the button component still
+     specifies these, and Brand-blue is a separate accent token. Several
+     surfaces are pinned to --violet-500 in their own Figma nodes. */
+  --violet-500:     #4d00ff;   /* gradient start */
+  --violet-200:     #bfb1ff;   /* glow bloom around the thread's ball */
+  --azure-450:      #3358f4;   /* thread gradient midpoint            */
+  --azure-400:      #4392ed;   /* gradient end   */
+  --azure-500:      #1675e2;   /* pressed start  */
+
+  --grad:           linear-gradient(90deg, var(--violet-500) 0%, var(--azure-400) 100%);
+  --grad-hover:     linear-gradient(90deg, var(--azure-400) 0%, var(--violet-500) 100%);
+  --grad-pressed:   linear-gradient(90deg, var(--azure-500) 0%, var(--blue-200) 100%);
+
+  /* Figma effect "Drop Shadow" — #361BFF33 = brand blue at 20% */
+  --shadow-brand:   0 2px 10.9px rgba(54, 27, 255, 0.2);
+  --shadow-pressed: 0 2px 10.9px rgba(26, 0, 221, 0.2);
+
+  /* Deep violet for text sitting on the brand gradient. Not in the library,
+     but the CTA card node specifies it explicitly. */
+  --violet-deep:    #1d0060;
+
+  /* ── Typography ──
+     Every Figma style is Involve at line-height 100%. That is right for
+     single-line UI, so the button / nav / label tokens use 1. Multi-line
+     headings and body copy keep a readable leading instead — see the
+     --lh-* tokens; setting them to 1 collides the lines. */
+  --font:           'Involve', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --fs-h0:          64px;   /* H0/Medium/64     */
+  --fs-h1:          44px;   /* H1/Medium/44     */
+  --fs-h2:          32px;   /* H2 Semibold and Bold  */
+  --fs-h3:          24px;   /* H3 Regular Medium Semibold */
+  --fs-h4:          20px;   /* H4 Regular and Semibold    */
+  --fs-l1:          18px;   /* L1 Medium Semibold, P1     */
+  --fs-l2:          16px;   /* L2/Semibold/16   */
+  --fs-p3:          14px;   /* P3/Regular/14    */
+
+  --lh-tight:       1;      /* single-line: buttons, nav, labels */
+  --lh-heading:     1.18;   /* multi-line headings               */
+  --lh-body:        1.4;    /* paragraphs                        */
+
+  /* Recurring alphas, named so the intent reads at the call site.
+     rgba(0,0,0,x) stops elsewhere are mask channels, not colours — those
+     stay literal on purpose. */
+  --black-20:       rgba(31, 31, 31, 0.2);     /* de-emphasised copy on light */
+  --white-30:       rgba(255, 255, 255, 0.3);  /* de-emphasised copy on dark  */
+  --white-72:       rgba(255, 255, 255, 0.72); /* = #c0c0c0 over --black      */
+  --surface-dim:    rgba(105, 105, 105, 0.2);  /* inactive card on --black    */
+
+  --brand-blue-20:  rgba(54, 27, 255, 0.2);    /* dim brand accent            */
+  --ink-dim:        rgba(54, 54, 54, 0.2);     /* dim body copy on light      */
+  --glass-fill:     rgba(226, 226, 226, 0.11); /* frosted card surface        */
+  --glass-edge:     rgba(191, 191, 191, 0.5);  /* frosted card border         */
+  --hairline-dark:  rgba(255, 255, 255, 0.12); /* rule on a dark surface      */
+  --hairline-edge:  rgba(255, 255, 255, 0.08); /* section divider on dark     */
+  --nav-veil:       rgba(255, 255, 255, 0.88); /* sticky navbar backdrop      */
+  --white-28:       rgba(255, 255, 255, 0.28);
+  --white-38:       rgba(255, 255, 255, 0.38);
+  --grayscale-300-30: rgba(192, 192, 192, 0.3);
+
+  /* UI timing — snappier than the scroll choreography's 0.72s */
+  --dur-ui:         0.26s;
+  --ease-ui:        cubic-bezier(0.22, 0.68, 0.24, 1);
+
+  /* Not in the Figma library — a validation colour was needed */
+  --danger:         #e5484d;
+  --danger-20:      rgba(229, 72, 77, 0.2);
+  --scrim:          rgba(31, 31, 31, 0.55);
+
+  /* ── Layout ── */
+  --gutter:         clamp(24px, 5.291vw, 80px);   /* 80px at 1512 */
+  --maxw:           1352px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* The UA stylesheet gives [hidden] display:none, but ANY author `display`
+   declaration outranks it — .modal__done { display: flex } made the success
+   panel permanently visible. This guard keeps `hidden` authoritative. */
+[hidden] { display: none !important; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* Reserve the scrollbar track permanently. The mobile menu and the modal
+     both lock scrolling with overflow:hidden, which removes the scrollbar and
+     widens the viewport by its width — the whole page, navbar included, used
+     to jump right by ~15px at that moment. */
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: 'Involve', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+  font-weight: 400;
+}
+
+img { display: block; max-width: 100%; }
+
+/* Shared inner container — 1352px content width at 1512 canvas */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* Gradient text helper */
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BUTTONS — mirrors the Figma component: 4 types x 2 sizes x 3 states.
+   Type sets colour, size sets geometry, so they compose freely:
+     .btn .btn--primary .btn--m
+   ══════════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  border: none;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+  overflow: hidden;
+  transition: background 0.18s ease, box-shadow 0.18s ease,
+              color 0.18s ease, border-color 0.18s ease;
+}
+
+/* ── Sizes ── */
+.btn--m { padding: 20px 24px; border-radius: 16px; font-size: var(--fs-l1); }
+.btn--s { padding: 14px 18px; border-radius: 12px; font-size: var(--fs-l2); }
+
+/* ── Primary ── */
+.btn--primary {
+  background: var(--grad);
+  color: var(--white);
+}
+.btn--primary:hover  { background: var(--grad-hover);   box-shadow: var(--shadow-brand); }
+.btn--primary:active { background: var(--grad-pressed); box-shadow: var(--shadow-pressed); }
+
+/* ── Secondary ── */
+.btn--secondary {
+  background: var(--white);
+  color: var(--black);
+}
+.btn--secondary:hover  { background: var(--grayscale-100); }
+.btn--secondary:active { background: var(--grayscale-200); }
+
+/* ── Outline ──
+   1px short on every side: the border adds to an auto-height box in CSS,
+   while Figma draws it inside. 19+1 = 20, so it matches .btn--m exactly. */
+.btn--outline {
+  border: 1px solid var(--grayscale-400);
+  background: transparent;
+  color: var(--black);
+}
+.btn--outline.btn--m { padding: 19px 23px; }
+.btn--outline.btn--s { padding: 13px 17px; }
+.btn--outline:hover  { background: var(--grayscale-100); }
+.btn--outline:active { background: var(--grayscale-200); }
+
+/* ── Text ── */
+.btn--text {
+  padding: 4px;
+  border-radius: 0;
+  background: none;
+  color: var(--black);
+}
+.btn--text.btn--m { font-size: var(--fs-l1); font-weight: 500; }
+.btn--text.btn--s { font-size: var(--fs-l2); font-weight: 600; }
+.btn--text:hover  { color: var(--grayscale-400); }
+.btn--text:active { color: var(--grayscale-500); }
+
+/* On the brand gradient card the label is the deep violet the CTA node
+   specifies, not the neutral Black the library uses on white. The 311px
+   width is part of that node too. */
+.btn--on-brand {
+  color: var(--violet-deep);
+  width: 311px;
+  max-width: 100%;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVBAR — py 12, px 80
+   ══════════════════════════════════════════════════════════════ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-veil);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  padding: 12px var(--gutter);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+}
+
+/* Logo slot is 200px wide in Figma; logo itself 149×33 */
+.navbar__logo { width: 200px; flex-shrink: 0; }
+.navbar__logo svg {
+  width: 149px;
+  height: 33px;
+  display: block;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3.307vw, 50px);
+}
+.navbar__links a {
+  font-size: clamp(15px, 1.19vw, 18px);
+  font-weight: 500;
+  color: var(--black);
+  text-decoration: none;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+.navbar__links a:hover { opacity: 0.55; }
+
+/* Anchor jumps: the sticky navbar (72px tall) would otherwise sit over the
+   top of the target section, hiding its heading. */
+section[id] { scroll-margin-top: 88px; }
+
+/* CTA slot is 200px wide, button offset 14px from left */
+.navbar__cta {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HERO — container h 422, inner offset top 102
+   ══════════════════════════════════════════════════════════════ */
+.hero {
+  padding: 102px var(--gutter) 0;
+}
+
+.hero__grid {
+  position: relative;
+  min-height: 422px;
+}
+
+/* Left column — w 752 (55.621% of 1352), gap 102 */
+.hero__left {
+  width: 55.621%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(40px, 6.746vw, 102px);
+}
+
+.hero__headline {
+  font-size: clamp(28px, 4.233vw, 64px);
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+.hero__ctas {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Right column — left 568 (42.012%), top 16, w 784 (57.988%), gap 87 */
+.hero__right {
+  position: absolute;
+  left: 42.012%;
+  top: 16px;
+  width: 57.988%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: clamp(32px, 5.754vw, 87px);
+}
+
+/* Description block — w 404, flush to the right edge of the column,
+   text itself left-aligned (Figma: items-end column, items-start text) */
+.hero__desc {
+  /* 404 / 784 of the right column — scales with the layout */
+  width: 51.531%;
+  min-width: 260px;
+  align-self: flex-end;
+  text-align: left;
+  font-size: clamp(16px, 1.587vw, 24px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--black);
+}
+
+/* Infinity visual — Frame.png is exactly 784×223 */
+.hero__visual {
+  width: 100%;
+  aspect-ratio: 784 / 223;
+  overflow: hidden;
+}
+.hero__visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ABOUT — px 80, py 50, text w 1354 @ 44px
+   ══════════════════════════════════════════════════════════════ */
+.about {
+  padding: clamp(32px, 3.307vw, 50px) var(--gutter);
+}
+
+.about__text {
+  font-size: clamp(22px, 2.910vw, 44px);
+  font-weight: 500;
+  line-height: 1.28;
+  letter-spacing: -0.005em;
+  color: var(--black-20);
+}
+.about__text strong {
+  font-weight: 500;
+  color: var(--black);
+}
+
+/* Scroll-driven word reveal */
+.about__text .word {
+  color: var(--black-20);
+  transition: color 0.12s linear;
+  will-change: color;
+}
+/* No-JS / reduced-motion fallback — first word solid, rest faded (Figma static) */
+.about__text .word--anchor { color: var(--black); }
+
+/* ══════════════════════════════════════════════════════════════
+   PROMISE — "Берем на себя"
+   A glowing ball travels a woven thread between three staggered
+   glass cards. Composition authored in a 1512 × 1120 space and
+   scaled via --u (= 1 design px at any viewport ≤ 1512).
+
+   Default state = fully open (no-JS / narrow / reduced-motion).
+   .is-animated enables the thread, the dim layer and the reveal.
+   ══════════════════════════════════════════════════════════════ */
+.promise {
+  --u: min(1vw, 15.12px);              /* 1512 × 0.01 */
+  position: relative;
+  width: 100%;
+  max-width: 1512px;
+  margin: 0 auto;
+  aspect-ratio: 1512 / 1120;
+}
+
+.promise__title {
+  position: absolute;
+  top: 4.4643%;                        /* 50 / 1120 */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  /* H2/Semibold/32 — the same size the other four section headings use.
+     Was 2.9101 (44px), which is not a library style: H1 is Medium, not
+     SemiBold. The 5.6vw mobile ramp made it ~1.5x the others mid-range. */
+  font-size: calc(2.1164 * var(--u));  /* 32px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--black);
+  z-index: 3;
+}
+
+/* ── Thread ── */
+.promise__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+  /* Hidden with opacity, not display:none — SVG path geometry must stay
+     measurable, and display:none makes getTotalLength() unreliable. */
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.promise.is-animated .promise__svg { opacity: 1; }
+
+.thread-dot { opacity: 0; transition: opacity 0.45s ease; }
+.thread-dot.is-on { opacity: 1; }
+
+/* Ball / contact dots — var(--brand-blue) core, 3px translucent white ring,
+   soft violet bloom standing in for the box-shadow */
+.promise__svg .node-core {
+  fill: var(--brand-blue);
+  stroke: var(--white);
+  stroke-opacity: 0.36;
+  stroke-width: 3;
+}
+.promise__svg .node-bloom { fill: url(#ballGlow); }
+
+/* ── Cards ────────────────────────────────────────────────────
+   Two identical stacked panels. The dim one sits in flow and
+   defines the box; the lit one is clipped by an expanding
+   circle centred on the ball's contact point. The box never
+   changes size — only clarity and the reveal radius.
+   ───────────────────────────────────────────────────────────── */
+.pc {
+  position: absolute;
+  width: 29.5635%;                     /* 447 / 1512 */
+  z-index: 2;
+  --rn: 40;                            /* reveal radius, in --u units */
+}
+
+/* Radius as a real length so it scales with the composition.
+   The two gradients are exact complements — alpha sums to 1 at every stop —
+   and the feather spans 55%→100% of the radius so the blur dissolves over a
+   wide soft band instead of snapping at a hard edge. Because of that feather
+   the solid core is only 55% of --rn, which is why --rn peaks well above the
+   raw 495 design px corner distance. */
+.promise.is-animated .pc {
+  --reveal: radial-gradient(
+    circle calc(var(--rn) * var(--u)) at var(--cx) var(--cy),
+    rgba(0, 0, 0, 1)    55%,
+    rgba(0, 0, 0, 0.92) 66%,
+    rgba(0, 0, 0, 0.70) 76%,
+    rgba(0, 0, 0, 0.38) 86%,
+    rgba(0, 0, 0, 0.14) 94%,
+    rgba(0, 0, 0, 0)   100%
+  );
+  --reveal-inv: radial-gradient(
+    circle calc(var(--rn) * var(--u)) at var(--cx) var(--cy),
+    rgba(0, 0, 0, 0)    55%,
+    rgba(0, 0, 0, 0.08) 66%,
+    rgba(0, 0, 0, 0.30) 76%,
+    rgba(0, 0, 0, 0.62) 86%,
+    rgba(0, 0, 0, 0.86) 94%,
+    rgba(0, 0, 0, 1)   100%
+  );
+}
+
+.pc--1 { left: 44.6429%; top: 26.1607%; }   /* 675 / 293 */
+.pc--2 { left: 10.7143%; top: 51.4286%; }   /* 162 / 576 */
+.pc--3 { left: 59.1270%; top: 72.3214%; }   /* 894 / 810 */
+
+.pc__layer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.7196 * var(--u));                             /* 26px */
+  padding: calc(2.1164 * var(--u)) calc(1.5212 * var(--u)); /* 32 / 23 */
+  border-radius: calc(1.5873 * var(--u));                   /* 24px */
+}
+
+/* Dim layer — the frosted glass + de-focused copy */
+.pc__layer--dim {
+  position: relative;
+  background: var(--glass-fill);
+  backdrop-filter: blur(34px);
+  -webkit-backdrop-filter: blur(34px);
+  border: 0.5px solid var(--glass-edge);
+  filter: blur(2px);
+  display: none;                       /* only present when animated */
+}
+/* Masked so the revealed circle is punched OUT — no ghosting under the lit copy */
+.promise.is-animated .pc__layer--dim {
+  display: flex;
+  -webkit-mask-image: var(--reveal-inv);
+  mask-image: var(--reveal-inv);
+}
+
+/* Lit layer — crisp copy, radially revealed */
+.pc__layer--lit {
+  position: relative;
+  background: var(--glass-fill);
+  backdrop-filter: blur(34px);
+  -webkit-backdrop-filter: blur(34px);
+  border: 0.5px solid var(--grayscale-300);
+}
+/* Once animated the lit layer overlays the dim one, revealed inside the circle */
+.promise.is-animated .pc__layer--lit {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: var(--reveal);
+  mask-image: var(--reveal);
+}
+
+.pc__num,
+.pc__title,
+.pc__text { width: 100%; }
+
+.pc__num {
+  font-size: calc(1.5873 * var(--u));  /* 24px */
+  font-weight: 600;
+}
+.pc__title {
+  font-size: calc(1.5873 * var(--u));  /* 24px */
+  font-weight: 600;
+}
+.pc__text {
+  font-size: calc(1.1905 * var(--u));  /* 18px */
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.pc__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.0582 * var(--u));        /* 16px */
+  width: 100%;
+}
+
+/* Colours — dim at 20% alpha, lit at full strength */
+.pc__layer--dim .pc__num   { color: var(--brand-blue-20); }
+.pc__layer--dim .pc__title { color: var(--black-20); }
+.pc__layer--dim .pc__text  { color: var(--ink-dim); }
+
+.pc__layer--lit .pc__num   { color: var(--brand-blue); }
+.pc__layer--lit .pc__title { color: var(--black); }
+.pc__layer--lit .pc__text  { color: var(--grayscale-500); }
+
+/* ── Narrow viewports: plain stack, no thread, all cards open ──
+   Numbers below are exact, from Figma node 338:502 (get_design_context),
+   not estimated — this is the mobile spec for this section. The 900px
+   breakpoint and is-animated/stacked switch are unchanged; only the
+   fallback's own sizes are corrected to match. */
+@media (max-width: 900px) {
+  .promise {
+    aspect-ratio: auto;
+    padding: 24px 8px;
+  }
+  .promise__title {
+    position: relative;   /* keeps z-index meaningful — static would drop it */
+    top: auto;
+    left: auto;
+    transform: none;
+    white-space: normal;
+    text-align: center;
+    font-size: 20px;             /* H4/Semibold/20 */
+    font-weight: 600;
+    margin-bottom: 32px;         /* title → card list */
+  }
+  .promise__svg { display: none; }
+  .promise__list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;                   /* card → card */
+  }
+  .pc { position: static; width: 100%; }
+  .pc__layer {
+    gap: 18px;                   /* number → title/text group */
+    padding: 24px 16px;
+    border-radius: 24px;
+    background: var(--grayscale-50);
+    border: 0.5px solid var(--grayscale-200);
+    backdrop-filter: blur(34px);
+    -webkit-backdrop-filter: blur(34px);
+  }
+  .pc__num {
+    font-size: 20px;
+    color: var(--brand-blue);
+  }
+  .pc__title { font-size: 18px; }
+  .pc__text  {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--grayscale-600);
+  }
+  .pc__group { gap: 12px; }      /* card title → card text */
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CTA CARD — h 354, radius 44
+   ══════════════════════════════════════════════════════════════ */
+.cta {
+  padding: clamp(32px, 3.307vw, 50px) var(--gutter);
+}
+
+/* Content is one centred column — copy group, 46px gap, button. Replaces the
+   old absolute top/bottom anchoring: vertical centring lands the text at ~47px
+   from the top, which is what the mock's 45px offset produced anyway, and it
+   holds together when the text rewraps. */
+.cta__card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1352 / 354;
+  min-height: 354px;
+  border-radius: 44px;
+  overflow: hidden;
+  background: var(--grad);
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 46px;
+  padding: 0 clamp(24px, 3vw, 48px);
+}
+
+/* Background texture at 72% opacity, anchored bottom */
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: bottom;
+  opacity: 0.72;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Copy group — w 808, centred, gap 12.
+   position:relative, not static: z-index is ignored on static elements and the
+   absolutely-positioned .cta__bg (z-index 0) would paint over the text. */
+.cta__text {
+  position: relative;
+  width: 808px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  z-index: 2;
+}
+
+.cta__title {
+  font-size: clamp(20px, 2.249vw, 34px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white);
+  width: 100%;
+}
+
+.cta__subtitle {
+  font-size: clamp(15px, 1.587vw, 24px);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--white);
+  width: 551px;
+  max-width: 100%;
+}
+
+/* Button sits in flow now; the 46px card gap is the distance from the copy */
+.cta__btn {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HAMBURGER + MOBILE MENU
+   ══════════════════════════════════════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 110;
+}
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--black);
+  border-radius: 2px;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s,
+              width 0.28s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Figma mini/bars-3-bottom-right (node 338:306): bottom bar is ~65% width
+   and right-aligned — top and middle stay full-width, flush left. */
+.hamburger span:nth-child(3) { width: 65%; margin-left: auto; }
+.hamburger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.is-open span:nth-child(2) { opacity: 0; }
+.hamburger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); width: 100%; margin-left: 0; }
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  /* Below .navbar (100) on purpose. z-index on .hamburger only orders it
+     within the navbar's own stacking context — from the outside the navbar
+     is a single layer, so a menu above it buried the close button. Keeping
+     the menu underneath leaves the logo and the X reachable. */
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Top pad = navbar height, so the list centres in the space below it. */
+  padding: 72px var(--gutter) 32px;
+
+  background: var(--white);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.34s ease, visibility 0.34s;
+}
+.mobile-menu.is-open { opacity: 1; visibility: visible; }
+
+/* Brand glow bleeding in from the top-right corner, so the sheet isn't a
+   flat white rectangle */
+.mobile-menu::before {
+  content: '';
+  position: absolute;
+  top: -28%;
+  right: -34%;
+  width: 92%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+              var(--brand-blue-20) 0%,
+              rgba(54, 27, 255, 0.06) 45%,
+              transparent 72%);
+  pointer-events: none;
+}
+
+.mobile-menu__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Each row: index, label, and a rule that draws itself in */
+.mobile-menu__item {
+  position: relative;
+  display: block;
+  padding: 18px 0;
+  text-decoration: none;
+  color: var(--black);
+
+  /* Staggered entrance — --i is set per item in the markup */
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.44s cubic-bezier(0.22, 0.68, 0.24, 1),
+              transform 0.44s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: calc(0.06s * var(--i, 0));
+}
+.mobile-menu.is-open .mobile-menu__item {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(0.08s + 0.06s * var(--i, 0));
+}
+
+.mobile-menu__label {
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* Hairline under each row, drawn left to right on open */
+.mobile-menu__item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--grad);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0.32;
+  transition: transform 0.5s cubic-bezier(0.22, 0.68, 0.24, 1);
+  transition-delay: calc(0.06s * var(--i, 0));
+}
+.mobile-menu.is-open .mobile-menu__item::after {
+  transform: scaleX(1);
+  transition-delay: calc(0.14s + 0.06s * var(--i, 0));
+}
+
+.mobile-menu__item:active .mobile-menu__label { color: var(--grayscale-400); }
+
+/* Footer of the sheet: CTA plus a line of contact copy */
+.mobile-menu__foot {
+  position: relative;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.44s cubic-bezier(0.22, 0.68, 0.24, 1),
+              transform 0.44s cubic-bezier(0.22, 0.68, 0.24, 1);
+}
+.mobile-menu.is-open .mobile-menu__foot {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.34s;
+}
+.mobile-menu__foot .btn { width: 100%; }
+
+.mobile-menu__note {
+  font-size: var(--fs-p3);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--grayscale-400);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu__item,
+  .mobile-menu__item::after,
+  .mobile-menu__foot { transition-duration: 0.01s; transition-delay: 0s; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Tablet & below: unstack the overlapping hero columns ── */
+@media (max-width: 1024px) {
+  .hero { padding-top: clamp(48px, 7vw, 80px); }
+
+  .hero__grid {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  /* The four pieces live in two separate columns on desktop, so `order`
+     alone can't interleave them — flatten both wrappers with
+     display:contents and their children become direct flex items.
+     Stacked order: headline → copy → buttons → visual. */
+  .hero__left,
+  .hero__right {
+    display: contents;
+  }
+
+  .hero__headline { order: 1; }
+  .hero__desc     { order: 2; }
+  .hero__ctas     { order: 3; }
+  .hero__visual   { order: 4; }
+
+  .hero__desc {
+    width: 100%;
+    min-width: 0;
+    max-width: 520px;
+    align-self: flex-start;
+    /* Grid gap is uniform, so pull the copy up toward the headline and push
+       the buttons away: headline→copy ends up ~12px, copy→buttons ~40px. */
+    margin-top: -20px;
+    margin-bottom: 8px;
+  }
+
+  .hero__visual { margin-top: 8px; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  /* Navbar — Figma mobile frame 338:459: 56px tall (8px padding + 40px row),
+     16px side gutter, logo 104×24, burger a 40×40 tap target. The gutter is
+     set literally rather than via --gutter, which clamps to 24px at this
+     width and is still correct for the sections further down the page. */
+  .navbar { padding: 8px 16px; }
+  .navbar__inner { height: 40px; }
+  section[id] { scroll-margin-top: 68px; }   /* navbar is 56px here */
+  .navbar__logo { width: auto; }
+  .navbar__logo svg { width: 104px; height: 24px; }
+  .navbar__links,
+  .navbar__cta { display: none; }
+  .hamburger { display: flex; }
+
+  /* Hero — Figma mobile: 390px frame, 16px gutters, 358px content column.
+     Navbar bottom → visual top is 127px.
+     Full-bleed: the hero must always fill the first screen on whatever
+     device it's opened from, so it's sized to the viewport minus the
+     sticky navbar (56px here) and the content is centered inside that,
+     rather than pinned to the 115px offset and leaving dead space below
+     on taller phones. 100svh (not 100dvh/100vh) is the floor that stays
+     filled even while the browser's address bar is expanded. */
+  .hero {
+    padding: 115px 16px 24px;
+    box-sizing: border-box;
+    min-height: 100vh;    /* fallback for browsers without svh support */
+    min-height: calc(100svh - 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Section rhythm — the About frame (338:460) itself carries only 12px of
+     top/bottom padding; the rest of the 48px gap to its neighbours is empty
+     space between frames on the Figma page, with no element of its own.
+     Splitting that total evenly as 24px top/bottom here reproduces the same
+     48px gap without needing a spacer element. */
+  .about { padding: 24px 16px; }
+
+  /* About paragraph — style token H3/Medium/24: Involve Medium 500, 24px,
+     32px line (the design box is 358×256 = 8 lines), letter-spacing 0. */
+  .about__text {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: 0;
+  }
+
+  /* .hero__left is display:contents here, so its own gap no longer applies.
+     The Figma rhythm is uneven (67 / 14 / 51), so the grid gap is zeroed and
+     each piece carries its own top margin instead. */
+  .hero__grid { gap: 0; }
+
+  /* The visual leads on mobile — it trails on desktop and tablet. */
+  .hero__visual   { order: 1; margin-top: 0; }
+  .hero__headline { order: 2; margin-top: 67px; }
+  .hero__desc     { order: 3; margin-top: 14px; }
+  .hero__ctas     { order: 4; margin-top: 51px; }
+
+  /* 24/32 gives the two-line wrap Figma shows in a 358×64 box. At the
+     previous 28px "бизнес," falls to line two and the block grows to 68px. */
+  .hero__headline { font-size: 24px; line-height: 32px; }
+
+  /* 16/21 — three lines in a 358×63 box */
+  .hero__desc {
+    font-size: 16px;
+    line-height: 21px;
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  /* Both buttons full width, 52px tall, 14px apart */
+  .hero__ctas {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .hero__ctas .btn {
+    width: 100%;
+    height: 52px;
+    padding: 0 24px;
+  }
+
+  /* Untouched — these still size the buttons in the CTA card below */
+  .btn--m { padding: 18px 24px; }
+  .btn--outline.btn--m { padding: 17px 23px; }   /* border adds the last 1px */
+
+  /* CTA banner — Figma node 338:462, read via get_design_context, so these
+     are exact rather than measured off a screenshot (see below for what
+     that corrects from the previous pass). The card sits on an 8px gutter,
+     narrower than the 16px used everywhere else on the page — that's the
+     design, not a typo: this banner is meant to run wider than body text. */
+  .cta { padding: 24px 8px; }
+
+  .cta__card {
+    aspect-ratio: auto;
+    min-height: 0;
+    border-radius: 32px;
+    padding: 24px 12px 12px;
+    align-items: stretch;
+    gap: 44px;                 /* text block → button */
+  }
+  .cta__bg { object-position: center; }
+
+  .cta__text {
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+    gap: 24px;                 /* title → copy */
+  }
+  /* H3/Semibold/24 and P2/Regular/16 — the 32 / 21 line-heights follow the
+     same auto-leading ratio already established for the hero headline and
+     hero copy on mobile (24→32, 16→21), which Involve renders at ~1.33×. */
+  .cta__title    { font-size: 24px; line-height: 32px; }
+  .cta__subtitle { font-size: 16px; line-height: 21px; font-weight: 400; width: 100%; }
+
+  /* Design specifies padding: 20px 24px (L1/Semibold/18) on a full-width
+     button, not a fixed height — that's what .btn--m already is on desktop.
+     Stated explicitly because the generic mobile override two rules up
+     (.btn--m { padding: 18px 24px }) would otherwise win here.
+     Radius is a genuine per-instance override, not the shared 16px token:
+     the hero's own button (node 338:450) is confirmed still 16px, so this
+     is scoped to the CTA button only rather than touching .btn--m. */
+  .cta__btn .btn {
+    width: 100%;
+    max-width: none;
+    padding: 20px 24px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__ctas { flex-direction: column; align-items: stretch; }
+  .btn--primary,
+  .btn--outline { width: 100%; }
+}
+
+
+/* ── Layout flag read by JS ───────────────────────────────────
+   window.innerWidth / matchMedia can disagree with the media query that
+   actually applied when a host scales the page (the Claude preview reports
+   629px while rendering the desktop layout). Letting CSS declare the mode
+   keeps the scripts and the stylesheet from ever diverging. */
+:root { --layout: desktop; }
+@media (max-width: 900px) {
+  :root { --layout: stacked; }
+}
+
+
+/* ── Respect reduced motion ──
+   Deliberately narrow. A blanket `* { transition: none !important }` also
+   killed harmless colour and opacity fades, and made the page look broken in
+   embedded webviews, which report `reduce` regardless of the host OS setting —
+   which is exactly why the promise block looked dead inside the Claude preview
+   while working in Chrome.
+   What is kept is the part that genuinely helps: no smooth-scroll hijack.
+   Every animation here is hover- or scroll-position-driven, none autoplays. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLEXIBLE — "Гибкое подключение"
+   Dark full-bleed band with 4 cards that flip on the X axis.
+   Authored in the same 1512 design space via --u.
+   4 × 332 + 3 × 8 = 1352 — exactly the site content width.
+   ══════════════════════════════════════════════════════════════ */
+.flexi {
+  --u: min(1vw, 15.12px);
+  background: var(--black);
+  padding: calc(3.3069 * var(--u)) var(--gutter);   /* 50px vertical */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(3.3069 * var(--u));                      /* 50px */
+}
+
+.flexi__title {
+  font-size: calc(2.1164 * var(--u));                /* 32px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white);
+  text-align: center;
+}
+
+.flexi__row {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(0.5291 * var(--u));                      /* 8px */
+  width: 100%;
+  max-width: var(--maxw);
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.fcard {
+  /* display:block matters — a <button>'s default internal centring can
+     otherwise interfere with aspect-ratio sizing */
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 332 / 458;
+  perspective: 1600px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fcard__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.72s cubic-bezier(0.22, 0.68, 0.24, 1);
+  will-change: transform;
+}
+.fcard:hover .fcard__inner,
+.fcard:focus-visible .fcard__inner,
+.fcard.is-flipped .fcard__inner { transform: rotateX(180deg); }
+
+.fcard__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: calc(1.5873 * var(--u));            /* 24px */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateX(0deg);
+}
+.fcard__face--front { background: var(--violet-500); }
+.fcard__face--back  { background: var(--grayscale-100); transform: rotateX(180deg); }
+
+/* Oversized number, dropped past the bottom edge and clipped */
+.fcard__num {
+  position: absolute;
+  left: 50%;
+  bottom: calc(7.6720 * var(--u));                   /* 116px */
+  transform: translate(-50%, 100%);
+  font-size: calc(9.9206 * var(--u));                /* 150px */
+  font-weight: 600;
+  line-height: normal;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.fcard__face--front .fcard__num { color: var(--black); }
+.fcard__face--back  .fcard__num { color: var(--violet-500); }
+
+/* Title + copy stacked from the top, so 1- and 2-line titles both sit right */
+.fcard__copy {
+  position: absolute;
+  top: calc(2.1164 * var(--u));                      /* 32px */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82.83%;                                     /* 275 / 332 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(1.7196 * var(--u));                      /* 26px */
+  text-align: center;
+}
+
+.fcard__label {
+  font-size: calc(1.5873 * var(--u));                /* 24px */
+  font-weight: 600;
+  line-height: 1.2;
+  max-width: 94.2%;                                  /* 259 / 275 */
+}
+.fcard__face--front .fcard__label { color: var(--white); }
+.fcard__face--back  .fcard__label { color: var(--black); }
+
+.fcard__text {
+  font-size: calc(1.5873 * var(--u));                /* 24px */
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--black);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .flexi__row { flex-wrap: wrap; gap: 12px; }
+  .fcard { flex: 1 1 calc(50% - 6px); aspect-ratio: 332 / 380; }
+  .fcard__label,
+  .fcard__text { font-size: clamp(16px, 2.1vw, 24px); }
+  .fcard__num  { font-size: clamp(96px, 13vw, 150px); }
+  .flexi__title { font-size: clamp(24px, 3.4vw, 32px); }
+}
+
+/* ── Mobile: scroll-driven flip — card opens when centred in viewport ──
+   Sizes below are exact, from Figma node 338:503 (get_design_context), not
+   scaled estimates. Notably the cards are NOT full-width here: 332×337px,
+   fixed, centred with visible side margins — and the oversized number is
+   the same literal 150px/116px used in the desktop composition, not a
+   scaled-down mobile figure. Both corrections from the previous pass. */
+@media (max-width: 640px) {
+  .flexi { padding: 24px 16px; gap: 32px; }
+  .flexi__row {
+    flex-direction: column;
+    align-items: center;       /* centres the fixed-width card in the row */
+    gap: 24px;                 /* card → card */
+  }
+  .flexi__title { font-size: 20px; }   /* H4/Semibold/20 */
+
+  .fcard {
+    flex: none;
+    width: 332px;
+    max-width: 100%;           /* safety on anything narrower than 364px */
+    height: 337px;
+    aspect-ratio: auto;
+    perspective: 800px;
+    cursor: default;
+  }
+
+  /* Re-enable 3D — only .is-flipped (set by scroll JS) triggers the rotate */
+  .fcard__inner {
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    transition: transform 0.72s cubic-bezier(0.22, 0.68, 0.24, 1);
+    height: 100%;
+  }
+  /* Pointer events don't flip on phones */
+  .fcard:hover .fcard__inner,
+  .fcard:focus-visible .fcard__inner { transform: none; }
+  .fcard.is-flipped .fcard__inner    { transform: rotateX(180deg); }
+
+  /* Both faces fill the card and hide their back side */
+  .fcard__face {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .fcard__face--front { display: block; } /* visible at rest */
+  .fcard__face--back  { transform: rotateX(180deg); } /* revealed on flip */
+
+  /* Fixed pixel offsets — --u is tiny on phones */
+  .fcard__copy {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 259px;
+    max-width: 90%;
+    padding: 0;
+    gap: 12px;
+    text-align: center;
+  }
+  .fcard__label { max-width: none; font-size: 20px; }
+  .fcard__text  { font-size: 16px; }
+  /* Literal 150 / 116 — the same design-space number the 1512px desktop
+     layout uses, not scaled down for the 332px mobile card. */
+  .fcard__num   { font-size: 150px; bottom: 116px; }
+}
+
+/* ── Touch tablets (≥ 641 px, no hover): tap-to-flip via JS ── */
+/* Cards stay in their default closed/hover state; JS adds .is-flipped on tap. */
+@media (hover: none) and (min-width: 641px) {
+  .fcard { cursor: pointer; }
+}
+
+/* Reduced motion: swap faces without the rotation */
+
+
+/* ══════════════════════════════════════════════════════════════
+   SPECIALISTS — "Наши специалисты"
+   Horizontal accordion: one card open at 708px, four collapsed at 145px.
+   Widths come from flex-grow on a zero basis (708 : 145 : 145 : 145 : 145),
+   so the proportions stay exact at any container width AND animate — much
+   safer than transitioning `width` against a px gap.
+   4 × 16px gap + 708 + 4 × 145 = 1352 — the site content width.
+   ══════════════════════════════════════════════════════════════ */
+.spec {
+  --u: min(1vw, 15.12px);
+  --ease: cubic-bezier(0.22, 0.68, 0.24, 1);
+  --dur: 0.72s;
+  background: var(--white);
+  padding: calc(3.3069 * var(--u)) var(--gutter);      /* 50px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(3.3069 * var(--u));                        /* 50px */
+}
+
+.spec__title {
+  font-size: calc(2.1164 * var(--u));                  /* 32px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--black);
+  text-align: center;
+}
+.spec__title em {
+  font-style: normal;
+  color: var(--brand-blue);
+}
+
+.spec__row {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(1.0582 * var(--u));                        /* 16px */
+  width: 100%;
+  max-width: var(--maxw);
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.scard {
+  display: block;
+  position: relative;
+  flex: 145 1 0;                                       /* collapsed share */
+  min-width: 0;
+  height: calc(30.2910 * var(--u));                    /* 458px */
+  border-radius: calc(1.5873 * var(--u));              /* 24px */
+  background: var(--grayscale-100);
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: flex-grow var(--dur) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.scard.is-open { flex-grow: 708; cursor: default; }
+
+/* Violet blob behind the portrait — 346 × 467, r300, right 29, top 108 */
+.scard__blob {
+  position: absolute;
+  top: calc(7.1429 * var(--u));                        /* 108px */
+  right: calc(1.9180 * var(--u));                      /* 29px  */
+  width: calc(22.8836 * var(--u));                     /* 346px */
+  height: calc(30.8862 * var(--u));                    /* 467px */
+  border-radius: calc(19.8413 * var(--u));             /* 300px */
+  background: var(--violet-500);
+  z-index: 1;
+  /* Parked fully below the card and clipped by overflow:hidden, so opening
+     reads as the shape rising up from the bottom edge. 100% of its own
+     height (467px) clears the 458px card with room to spare. */
+  transform: translateY(100%);
+  transition: transform var(--dur) var(--ease);
+  pointer-events: none;
+}
+.scard.is-open .scard__blob {
+  transform: translateY(0);
+  transition-delay: calc(var(--dur) * 0.10);
+}
+
+/* Portrait — anchored from the right so it slides as the card grows.
+   collapsed: right -59.5px (264 wide photo centred in a 145 card)
+   open:      right  70px */
+.scard__photo {
+  position: absolute;
+  bottom: 0;
+  right: calc(-3.9352 * var(--u));
+  height: 100%;
+  width: auto;
+  max-width: none;
+  z-index: 2;
+  filter: grayscale(1);
+  /* --shift corrects source PNGs where the person isn't centred in the frame.
+     Expressed in % of the photo's own width, so it scales with the image at
+     every breakpoint. Set per card inline; defaults to 0. */
+  transform: translateX(var(--shift, 0%));
+  transition: right var(--dur) var(--ease),
+              filter var(--dur) var(--ease);
+  pointer-events: none;
+}
+.scard.is-open .scard__photo {
+  right: calc(4.6296 * var(--u));                      /* 70px */
+  filter: grayscale(0);
+}
+
+/* Role + name */
+.scard__meta {
+  position: absolute;
+  top: calc(1.8519 * var(--u));                        /* 28px */
+  left: calc(1.8519 * var(--u));                       /* 28px */
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(calc(-0.9 * var(--u)));
+  transition: opacity calc(var(--dur) * 0.75) var(--ease),
+              transform calc(var(--dur) * 0.75) var(--ease);
+  pointer-events: none;
+}
+.scard.is-open .scard__meta {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: calc(var(--dur) * 0.28);
+}
+
+.scard__role {
+  font-size: calc(1.1905 * var(--u));                  /* 18px */
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--black);
+}
+.scard__name {
+  font-size: calc(2.1164 * var(--u));                  /* 32px */
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--brand-blue);
+}
+
+/* ── Mobile: vertical stack, every card open ──
+   Sizes below are exact, from Figma node 344:930 (get_design_context), not
+   estimated. Two things worth noting: the card is full card-width height
+   flat (374×457, no further shrink at small phone widths — the design gives
+   only one mobile frame and width:100% already handles narrower viewports),
+   and the blob is a literal 292×304 dome (radius 300 on the top corners
+   only), not the all-round 150px pill this fallback used before. */
+@media (max-width: 900px) {
+  .spec { padding: 22px 8px; gap: 32px; }
+  .spec__title { font-size: 20px; }   /* H4/Semibold/20 */
+
+  .spec__row {
+    flex-direction: column;
+    gap: 24px;                 /* card → card */
+  }
+
+  .scard,
+  .scard.is-open {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 457px;
+    border-radius: 24px;
+    cursor: default;
+    transition: none;
+  }
+
+  /* The desktop card is 708px wide, so text-left / person-right works there.
+     On a phone that column is far too narrow and the name collided with the
+     blob, so the card stacks internally instead: copy across the full width
+     at the top, portrait and blob centred against the bottom edge. */
+  .scard__meta {
+    opacity: 1;
+    transform: none;
+    top: 24px;
+    left: 24px;
+    right: auto;                /* hugs its content, doesn't stretch */
+    white-space: nowrap;        /* role and name are single-line in the design */
+    transition: none;
+    transition-delay: 0s;
+  }
+  .scard__role { font-size: 16px; }    /* P2/Regular/16 */
+  .scard__name { font-size: 20px; }    /* H4/Semibold/20 */
+
+  /* Both selectors listed on purpose. `.scard.is-open .scard__blob` carries
+     three classes, this block only one, and a media query adds no specificity
+     — so the desktop rule's translateY(0) was beating translateX(-50%) here
+     and the blob lost its centring, sliding right by half its width. */
+  .scard__blob,
+  .scard.is-open .scard__blob {
+    opacity: 1;
+    top: auto;
+    bottom: 0;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 292px;
+    height: 304px;
+    border-radius: 300px 300px 0 0;   /* dome: round top, flat bottom */
+    transition: none;
+  }
+
+  /* Position relative to the blob (Figma): the photo window sits flush with
+     the blob's — and therefore the card's — bottom edge, centred
+     horizontally, occupying nearly the full 236px-wide blob interior.
+     Sized per card from get_design_context on nodes 344:938/945/948/952/953.
+
+     Fit mode is "contain", not "cover": get_design_context's raw crop
+     percentages were computed against Figma's own source image, which is
+     not the same file as the pre-cropped local PNGs here — replaying that
+     math against these files either cut into the face or left an ugly gap,
+     depending on which edge was anchored. Showing the whole local photo,
+     scaled to size and bottom-anchored, reproduces the actual composition
+     (natural headroom, flush at the bottom) without needing to guess a crop
+     that doesn't apply to these files. --shift is a separate, desktop-only
+     correction and is deliberately not read here. */
+  .scard__photo,
+  .scard.is-open .scard__photo {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 0;
+    transform: translateX(-50%);
+    max-width: none;
+    object-fit: contain;
+    object-position: center bottom;
+    filter: grayscale(0);
+    transition: none;
+  }
+  .spec__row .scard:nth-child(1) .scard__photo { width: 231px; height: 301px; }
+  .spec__row .scard:nth-child(2) .scard__photo { width: 280px; height: 295px; }
+  .spec__row .scard:nth-child(3) .scard__photo { width: 222px; height: 291px; }
+  .spec__row .scard:nth-child(4) .scard__photo { width: 177px; height: 298px; }
+  .spec__row .scard:nth-child(5) .scard__photo { width: 249px; height: 290px; }
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   EXPERIENCE — "Наш опыт"
+   Four cases in a 2x2 grid. Deliberately NOT the pinned deck it used
+   to be: scroll was doing double duty there — advancing the page and
+   swapping cards — so nothing ever held still long enough to read
+   ~50 words. A grid also matches the content: these are four
+   independent cases, not ordered steps, so nothing should imply a
+   sequence. That keeps it visually distinct from the step list in
+   "Как мы ведём проект", which sits right after it.
+
+   The only motion left is a one-shot entrance: the cards start
+   stacked and settle into their cells when the section comes into
+   view, then stay put.
+   ══════════════════════════════════════════════════════════════ */
+.exp {
+  --u: min(1vw, 15.12px);
+  background: var(--white);
+  padding: calc(3.3069 * var(--u)) var(--gutter);   /* 50px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(3.3069 * var(--u));
+}
+
+.exp__title {
+  font-size: calc(2.1164 * var(--u));   /* 32px — H2/Semibold/32 */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--black);
+  text-align: center;
+}
+.exp__title em {
+  font-style: normal;
+  color: var(--brand-blue);
+}
+
+.exp__grid {
+  width: 100%;
+  max-width: var(--maxw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: calc(1.0582 * var(--u));                     /* 16px */
+}
+
+.ecard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--black);
+  border-radius: calc(2.1164 * var(--u));           /* 32px */
+  padding: calc(2.1164 * var(--u));                 /* 32px */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(2.1164 * var(--u));
+
+  /* Entrance: stacked and slightly lifted, released by .is-in */
+  opacity: 0;
+  transform: translateY(calc(2.1164 * var(--u))) scale(0.985);
+  /* A slower move needs slightly more travel, or it reads as a plain fade
+     instead of a rise. 32px at 1512, up from 24px. */
+  transition: opacity 0.86s var(--ease-ui),
+              transform 0.86s var(--ease-ui);
+  transition-delay: calc(0.11s * var(--i, 0));
+}
+.exp__grid.is-in .ecard {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sheen that follows the pointer. Only light moves — the text never
+   shifts, which is the whole point after the reading complaint.
+   --mx / --my are written by the script; the layer idles at 0 opacity. */
+.ecard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-ui);
+  background: radial-gradient(
+    circle calc(24 * var(--u)) at var(--mx, 50%) var(--my, 50%),
+    rgba(120, 130, 255, 0.16) 0%,
+    rgba(120, 130, 255, 0.07) 38%,
+    transparent 70%
+  );
+}
+.ecard:hover::before { opacity: 1; }
+
+/* Content above the sheen */
+.ecard__head,
+.ecard__result { position: relative; z-index: 1; }
+
+.ecard__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.0582 * var(--u));                     /* 16px */
+  width: 100%;
+}
+
+.ecard__kind {
+  font-size: calc(1.1905 * var(--u));               /* 18px — P1/Regular/18 */
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--white);
+}
+
+.ecard__titlewrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(0.5291 * var(--u));                     /* 8px */
+  width: 100%;
+}
+
+.ecard__title {
+  font-size: calc(1.8519 * var(--u));               /* 28px */
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  color: var(--white);
+}
+
+.ecard__body {
+  font-size: calc(1.1905 * var(--u));               /* 18px */
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--grayscale-50);
+}
+
+.ecard__result {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  /* 220% wide so background-position has somewhere to travel */
+  background-image: var(--grad);
+  background-size: 220% 100%;
+  background-position: 0% 0;
+  border-radius: calc(1.1905 * var(--u));           /* 18px */
+  padding: calc(0.7937 * var(--u)) calc(1.5873 * var(--u));   /* 12 / 24 */
+  font-size: calc(1.1905 * var(--u));               /* 18px */
+  font-weight: 500;
+  line-height: var(--lh-body);
+  color: var(--grayscale-50);
+  transition: background-position 0.9s var(--ease-ui);
+}
+.ecard:hover .ecard__result { background-position: 100% 0; }
+.ecard__result b { font-weight: 700; }
+
+/* One-shot sweep as the card lands — a beat of delight tied to arrival,
+   not to reading, so it cannot get in the way. */
+.ecard__result::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(105deg,
+              transparent 42%,
+              rgba(255, 255, 255, 0.28) 50%,
+              transparent 58%);
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  background-position: -60% 0;
+}
+.exp__grid.is-in .ecard__result::after {
+  animation: ecardSweep 1.15s var(--ease-ui) forwards;
+  /* Starts as its own card is settling, so the stagger must match above */
+  animation-delay: calc(0.6s + 0.11s * var(--i, 0));
+}
+@keyframes ecardSweep {
+  from { background-position: -60% 0; }
+  to   { background-position: 160% 0; }
+}
+
+/* ── Narrow: one column ──
+   Sizes below are exact, from Figma node 338:562 (get_design_context), not
+   estimated — including the head→result gap being 44px, larger than the
+   desktop 32px rather than a scaled-down fraction of it, the same pattern
+   already seen in the Promise and flip-card sections. */
+@media (max-width: 900px) {
+  .exp { padding: 24px 8px; gap: 32px; }
+  .exp__title { font-size: 20px; }   /* H4/Semibold/20 */
+
+  .exp__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;                 /* card → card */
+  }
+
+  .ecard {
+    border-radius: 32px;
+    padding: 24px 12px 12px;   /* top / sides / bottom */
+    gap: 44px;                 /* head block → result box */
+  }
+  .ecard__head { gap: 16px; }
+  /* P2/Regular/16 — smaller than the desktop kind label (P1/Regular/18),
+     not just a scaled-down version of it. */
+  .ecard__kind  { font-size: 16px; }
+  .ecard__titlewrap { gap: 8px; }
+  .ecard__title { font-size: 20px; line-height: 1.2; }   /* H4/Semibold/20 */
+  .ecard__body  { font-size: 16px; }
+  .ecard__result {
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 24px;
+  }
+  /* The "Результат." lead-in is a distinct size, not just bold — 18px
+     Semibold against the 16px Regular body of the rest of the line. */
+  .ecard__result b { font-size: 18px; font-weight: 600; }
+}
+
+/* No hover on touch: the entrance is the whole effect there, and faking
+   hover with a tap would be misleading — the card isn't clickable. */
+@media (hover: none) {
+  .ecard::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecard { transition-duration: 0.01s; transition-delay: 0s; }
+  .ecard::before,
+  .ecard__result { transition: none; }
+  .exp__grid.is-in .ecard__result::after { animation: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PROCESS — "Как мы ведём проект"
+   Two columns: a pinned step list on the left, cards flowing on the
+   right. The list is the progress indicator — every step name stays
+   visible, so nothing is hidden and no progress bar is needed.
+   Deliberately quiet: only the highlight moves. The page already
+   carries five scroll-driven sequences.
+   Layout: 420 + 80 + 852 = 1352 — the site content width.
+   ══════════════════════════════════════════════════════════════ */
+.pw {
+  --u: min(1vw, 15.12px);
+  --ease: cubic-bezier(0.22, 0.68, 0.24, 1);
+  --dur: 0.72s;
+  background: var(--black);
+  padding: calc(3.3069 * var(--u)) var(--gutter);
+}
+
+.pw__inner {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: calc(5.2910 * var(--u));          /* 80px */
+}
+
+/* ── Pinned left column ── */
+.pw__aside {
+  position: sticky;
+  top: calc(7.1429 * var(--u));          /* 108px — clears the navbar */
+  width: calc(27.7778 * var(--u));       /* 420px */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(2.6455 * var(--u));          /* 40px */
+}
+
+.pw__title {
+  font-size: calc(2.1164 * var(--u));    /* 32px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white);
+}
+
+.pw__list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(0.2646 * var(--u));          /* 4px */
+}
+
+/* Each step is a real button — the list doubles as navigation */
+.pw__step {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: calc(0.9259 * var(--u));          /* 14px */
+  padding: calc(0.7937 * var(--u)) 0 calc(0.7937 * var(--u)) calc(1.0582 * var(--u));
+  background: none;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Active marker — 2px gradient bar at the left edge */
+.pw__step::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(0.5291 * var(--u));
+  bottom: calc(0.5291 * var(--u));
+  width: 2px;
+  border-radius: 2px;
+  background: var(--grad);
+  opacity: 0;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.pw__step.is-on::before { opacity: 1; transform: scaleY(1); }
+
+.pw__stepnum {
+  flex-shrink: 0;
+  font-size: calc(1.0582 * var(--u));    /* 16px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white-28);
+  transition: color var(--dur) var(--ease);
+}
+/* On var(--black) the brand violet reads too dark for 16px text, so the accent
+   here is carried by the gradient bar; the number just goes to full white. */
+.pw__step.is-on .pw__stepnum { color: var(--white); }
+
+.pw__steplabel {
+  font-size: calc(1.3228 * var(--u));    /* 20px */
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--white-38);
+  transition: color var(--dur) var(--ease);
+}
+.pw__step.is-on .pw__steplabel { color: var(--white); }
+.pw__step:hover .pw__steplabel { color: var(--white-72); }
+.pw__step.is-on:hover .pw__steplabel { color: var(--white); }
+
+/* ── Right column ── */
+.pw__cards {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.0582 * var(--u));          /* 16px */
+}
+
+.pw__card {
+  scroll-margin-top: 120px;
+  background: var(--surface-dim);
+  transition: background-color var(--dur) var(--ease);
+  border-radius: calc(1.5873 * var(--u));                      /* 24px */
+  padding: calc(2.1164 * var(--u)) calc(1.5873 * var(--u));    /* 32 / 24 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.7196 * var(--u));                                /* 26px */
+}
+.pw__card.is-on { background: var(--grayscale-600); }
+
+/* Pass-through wrappers — same gap as the card's own, so nesting num and
+   title/text this way is visually identical to the old flat structure at
+   every width except mobile, where they take Figma's own 12px/8px values
+   (see the 900px block) instead of the uniform card gap. */
+.pw__head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.7196 * var(--u));                                /* 26px, matches .pw__card */
+  width: 100%;
+}
+.pw__titlegroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.7196 * var(--u));                                /* 26px, matches .pw__card */
+  width: 100%;
+}
+
+/* Inactive is the default state; .is-on lifts a card to full strength. */
+.pw__num {
+  font-size: calc(1.5873 * var(--u));    /* 24px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white-30);
+  transition: color var(--dur) var(--ease);
+}
+.pw__card.is-on .pw__num { color: var(--white); }
+
+.pw__ctitle {
+  font-size: calc(1.5873 * var(--u));    /* 24px */
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--white-30);
+  transition: color var(--dur) var(--ease);
+}
+.pw__card.is-on .pw__ctitle { color: var(--white); }
+
+.pw__text {
+  font-size: calc(1.1905 * var(--u));    /* 18px */
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--grayscale-300-30);
+  transition: color var(--dur) var(--ease);
+}
+.pw__card.is-on .pw__text { color: var(--grayscale-300); }
+
+/* Gradient hairline replacing the old grey rule */
+/* Doubles as the card's active accent — dim by default, full gradient when
+   the card is the one being read. */
+.pw__rule {
+  width: 100%;
+  height: 1px;
+  background: var(--grad);
+  opacity: 0.3;
+  border-radius: 1px;
+  transition: opacity var(--dur) var(--ease);
+}
+.pw__card.is-on .pw__rule { opacity: 1; }
+
+/* ── Narrow: drop the pinned nav, keep heading + cards ──
+   Sizes below are exact, from Figma node 344:631 (get_design_context), not
+   estimated. One structural point worth flagging: Figma's inactive cards
+   keep the SAME solid #2b2b2b background as the active one — only the text
+   opacity drops to 30% — unlike desktop's is-on/is-off, which swaps between
+   two different background colours. That's why .pw__card gets a flat
+   background override here rather than just resized padding. */
+@media (max-width: 900px) {
+  .pw { padding: 24px 8px; }
+
+  .pw__inner {
+    flex-direction: column;
+    gap: 32px;                 /* title → cards */
+  }
+
+  .pw__aside {
+    position: static;
+    top: auto;
+    width: 100%;
+    gap: 0;
+  }
+  /* The list is navigation for a two-column layout; stacked, every card
+     is already reachable and its own number carries the position. */
+  .pw__list { display: none; }
+
+  .pw__title {
+    font-size: 20px;           /* H4/Semibold/20 */
+    text-align: center;
+  }
+
+  .pw__cards { width: 100%; gap: 24px; }   /* card → card */
+
+  /* Cards keep their active/inactive states here — the script highlights
+     whichever one is in the reading zone as you scroll — but on mobile that
+     distinction lives entirely in text opacity, not card background. */
+  .pw__card {
+    background: var(--grayscale-600);
+    border-radius: 24px;
+    padding: 28px 16px;
+    gap: 16px;                 /* head block → rule → closing line */
+  }
+  .pw__head       { gap: 12px; }   /* number → title/body group */
+  .pw__titlegroup { gap: 8px;  }   /* title → first paragraph */
+
+  .pw__num,
+  .pw__ctitle { font-size: 18px; }   /* P1/Regular/18, H4-weight kept at 18 here */
+  .pw__text   { font-size: 16px; color: rgba(248, 248, 248, 0.3); }
+  .pw__card.is-on .pw__text { color: var(--grayscale-50); }
+}
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   LEAD MODAL — opened by every "Обсудить проект" / "Рассчитать смету"
+   ══════════════════════════════════════════════════════════════ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;                 /* above the navbar (100) and its menu (90) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;           /* also drops it out of the tab order */
+  transition: opacity var(--dur-ui) var(--ease-ui),
+              visibility var(--dur-ui);
+}
+.modal.is-open { opacity: 1; visibility: visible; }
+
+.modal__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal__dialog {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px 32px 32px;
+  box-shadow: 0 24px 64px rgba(31, 31, 31, 0.22);
+  transform: translateY(12px) scale(0.97);
+  transition: transform var(--dur-ui) var(--ease-ui);
+}
+.modal.is-open .modal__dialog { transform: none; }
+
+.modal__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--grayscale-400);
+  cursor: pointer;
+  transition: background var(--dur-ui) var(--ease-ui), color var(--dur-ui) var(--ease-ui);
+}
+.modal__close:hover { background: var(--grayscale-100); color: var(--black); }
+.modal__close svg { width: 16px; height: 16px; display: block; }
+
+/* ── Form ── */
+.modal__form,
+.modal__done {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal__head { display: flex; flex-direction: column; gap: 8px; }
+
+.modal__title {
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--black);
+}
+.modal__sub {
+  font-size: var(--fs-l1);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--grayscale-400);
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+
+.field__label {
+  font-size: var(--fs-p3);
+  font-weight: 500;
+  line-height: var(--lh-tight);
+  color: var(--grayscale-400);
+}
+
+.field__input {
+  width: 100%;
+  font-family: var(--font);
+  font-size: var(--fs-l1);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  color: var(--black);
+  background: var(--white);
+  border: 1px solid var(--grayscale-200);
+  border-radius: 12px;
+  padding: 17px 16px;
+  transition: border-color var(--dur-ui) var(--ease-ui),
+              box-shadow var(--dur-ui) var(--ease-ui);
+}
+.field__input::placeholder { color: var(--grayscale-300); }
+.field__input:hover { border-color: var(--grayscale-300); }
+.field__input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px var(--brand-blue-20);
+}
+
+.field__error {
+  font-size: var(--fs-p3);
+  line-height: var(--lh-tight);
+  color: var(--danger);
+  min-height: 0;
+}
+.field.has-error .field__input { border-color: var(--danger); }
+.field.has-error .field__input:focus { box-shadow: 0 0 0 3px var(--danger-20); }
+
+/* ── Consent ── */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.consent__box {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border: 1px solid var(--grayscale-300);
+  border-radius: 6px;
+  background: var(--white);
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--dur-ui) var(--ease-ui),
+              background var(--dur-ui) var(--ease-ui);
+}
+.consent__box:checked {
+  background: var(--grad);
+  border-color: transparent;
+}
+/* Tick drawn with two borders so no extra asset is needed */
+.consent__box:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 3px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.consent__box:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--brand-blue-20);
+}
+.consent__text {
+  font-size: var(--fs-p3);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  color: var(--grayscale-400);
+}
+.consent__text a { color: var(--brand-blue); text-decoration: none; }
+.consent__text a:hover { text-decoration: underline; }
+.consent.has-error .consent__box { border-color: var(--danger); }
+
+.modal__submit { width: 100%; margin-top: 4px; }
+
+/* ── Success state ── */
+.modal__done { text-align: center; align-items: center; padding: 8px 0; }
+
+.modal__tick {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-brand);
+}
+.modal__tick svg { width: 26px; height: 26px; display: block; }
+
+@media (max-width: 640px) {
+  .modal { padding: 16px; align-items: flex-end; }
+  .modal__dialog {
+    padding: 32px 20px 24px;
+    border-radius: 20px;
+    max-height: calc(100vh - 32px);
+  }
+  .modal__sub { font-size: var(--fs-l2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal, .modal__dialog { transition-duration: 0.01s; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER
+   Continues the dark tail of the page. Muted text is expressed as a
+   white alpha rather than a new grey — 0.72 over var(--black) resolves to
+   var(--grayscale-300), matching the mock while staying inside the palette.
+   ══════════════════════════════════════════════════════════════ */
+.foot {
+  --u: min(1vw, 15.12px);
+  background: var(--black);
+  border-top: 1px solid var(--hairline-edge);
+  padding: calc(2.9101 * var(--u)) var(--gutter);   /* 44px */
+}
+
+.foot__inner {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.5873 * var(--u));                     /* 24px */
+}
+
+.foot__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: calc(2.6455 * var(--u));
+  width: 100%;
+}
+
+.foot__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(2.1164 * var(--u));                     /* 32px */
+}
+
+.foot__logo svg {
+  width: calc(9.8545 * var(--u));                   /* 149px */
+  height: calc(2.1825 * var(--u));                  /* 33px  */
+  display: block;
+}
+
+.foot__tagline {
+  width: calc(22.9497 * var(--u));                  /* 347px */
+  max-width: 100%;
+  font-size: calc(1.0582 * var(--u));               /* 16px */
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--white-72);
+}
+
+.foot__nav {
+  width: calc(14.5503 * var(--u));                  /* 220px */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.5873 * var(--u));                     /* 24px */
+}
+
+.foot__navtitle {
+  font-size: calc(1.1905 * var(--u));               /* 18px */
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--white);
+}
+
+.foot__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(0.7937 * var(--u));                     /* 12px */
+}
+
+.foot__links a {
+  font-size: calc(1.0582 * var(--u));               /* 16px */
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--white);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.foot__links a:hover { opacity: 0.55; }
+
+.foot__rule {
+  width: 100%;
+  height: 1px;
+  background: var(--hairline-dark);
+}
+
+.foot__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(1.5873 * var(--u));
+  width: 100%;
+  font-size: calc(0.9259 * var(--u));               /* 14px */
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--white-72);
+}
+.foot__bottom a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.foot__bottom a:hover { opacity: 0.6; }
+
+@media (max-width: 900px) {
+  /* Footer — exact, from Figma node 346:986 (get_design_context), not
+     estimated. 16px gutter: the rule renders exactly 358px wide on the
+     390px frame. */
+  .foot { padding: 36px 16px; }
+  .foot__inner { gap: 24px; }        /* tagline → rule → policy */
+
+  .foot__top {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .foot__brand { gap: 32px; }
+  .foot__logo svg { width: 149px; height: 33px; }
+  .foot__tagline {
+    width: 100%;
+    font-size: 16px;
+    line-height: 21px;
+    color: var(--grayscale-50);      /* #f8f8f8, not plain white */
+  }
+
+  /* The mobile design has no footer navigation — it runs logo → tagline →
+     rule → policy → copyright. Hidden rather than deleted so the desktop
+     footer, which does carry the nav column, is left alone. */
+  .foot__nav { display: none; }
+
+  /* Design stacks the policy link above the copyright line. The markup has
+     them the other way round for the desktop row, so reverse rather than
+     reorder the DOM. */
+  .foot__bottom {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 44px;
+    font-size: 16px;
+  }
+  .foot__bottom a {
+    font-weight: 600;                /* L2/Semibold/16 */
+    color: var(--white);
+    white-space: normal;
+  }
+  .foot__bottom p {
+    color: var(--grayscale-300);     /* #c3c3c3 — flat grey, not white-72 */
+    font-weight: 500;                /* L2/Medium/16 */
+  }
+}
